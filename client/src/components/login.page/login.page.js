@@ -1,15 +1,12 @@
-import React, { useState} from 'react';
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, withRouter } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ history }) => {
 
     const [val, setVal] = useState({
         email: '',
         password: ''
     });
-
-    
-        
     const handleSubmit = (e) => {
         e.preventDefault()
         let data = {
@@ -23,16 +20,15 @@ const Login = () => {
             },
             body: JSON.stringify(data)
         })
-           .then(res => res.text())
-          //   .then(res => console.log('RESULTS: ' + JSON.stringify(res)))
-            .then((res) => localStorage.setItem('token-jwt', res))
+            .then(res => res.text())            
+            .then((res) => { if (res) { history.push('/') } })
             .catch(er => console.log(er))
     }
-   // let storetoken = localStorage.getItem('token-jwt')
-    return (
+      return (
         <div>
             <h1>I am A Login Page</h1>
-            <Link to='/'>Home</Link>
+            <Link to='/'>Home</Link><br /><br/>
+            <Link to='/test'>test</Link><br /> <br />
             <Link to='/signup'>Signup</Link>
             <form onSubmit={handleSubmit} method='POST'>
                 <div className='form-group'>
@@ -56,12 +52,11 @@ const Login = () => {
                     />
                 </div>
                 <div className='text-center'>
-                    &nbsp;
-                            <button type="submit" >Login</button>&nbsp;
+                      &nbsp;
+                      <button type="submit" >Login</button>&nbsp;
                            
                 </div>
             </form>
-            
         </div>)
 }
-export default Login;
+export default withRouter(Login);

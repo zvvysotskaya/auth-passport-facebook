@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
 
+
 const Signup = () => {
     const [val, setVal] = useState({
         firstname: '',
@@ -32,7 +33,8 @@ const Signup = () => {
     return (
         <div>
             <h1>I am A Signup Page</h1>
-            <Link to='/'>Home</Link><br/>
+            <Link to='/'>Home</Link><br /><br />
+            <Link to='/test'>test</Link>
             <Link to='/login'>Login</Link>
             <form onSubmit={handleSubmit} method='POST'>
                 <label>First name</label>

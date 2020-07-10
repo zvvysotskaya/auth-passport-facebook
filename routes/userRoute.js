@@ -50,18 +50,25 @@ module.exports = function (app) {
             if (!user) { return res.redirect('/login'); }
             req.logIn(user, function (err) {
                 if (err) {
-                    return next(err => {
-                        return res.status(401).send({ err });
+                    return next(() => {
+                        return res.status(401);
                     })
                 }
                 console.log('/email/: ' + JSON.stringify(user))
-                let token = jwt.sign({
-                    data: 'foobar'
-                }, 'secret', { expiresIn: '1h' });
-                console.log("TOKEN: " + token)
-                return res.json(token);
+                if (user) {
+                    let token = jwt.sign({
+                        data: 'foobar'
+                    }, 'secret', { expiresIn: '1h' });
+                    console.log("TOKEN: " + token)
+                    return res.send(token);
+                }
+                
             })
         })(req, res, next)
     });
-    
+    app.get('/logout', function (req, res, next) {
+        myPassport.localPassport.authenticate('local', function (err, user, info) {
+            if (err) { return next(err); }
+        })(req, res, next)
+    })  
 }

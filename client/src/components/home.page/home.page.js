@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LoginLogout from '../check-login-logout/check-login-logout';
 
 const Home = () => {
 
@@ -9,7 +10,7 @@ const Home = () => {
         <div>
             <h1>I am A Home Page</h1>
             <Link to='/signup'>Signup</Link><br /><br />
-            <Link to='/login'>Login</Link><br /><br />
+            <LoginLogout/><br /><br />
             <Link to='/test'>test</Link>
         </div>)
 }
