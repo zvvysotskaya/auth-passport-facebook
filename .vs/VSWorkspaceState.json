@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\client",
+    "\\client\\src",
+    "\\client\\src\\components",
+    "\\client\\src\\components\\login.page",
+    "\\client\\src\\components\\private-route",
+    "\\configs",
+    "\\routes"
+  ],
+  "SelectedNode": "\\client\\src\\components\\private-route\\private-route.js",
+  "PreviewInSolutionExplorer": false
+}
