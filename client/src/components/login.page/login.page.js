@@ -24,7 +24,6 @@ const Login = ({ history }) => {
             .then(res => res.text())
             .then((res) => {
                 try {
-                    
                     let tokenVerified = jwt.verify(res, 'secret');
                     if (tokenVerified != undefined) {
                         localStorage.setItem('token-jwt', res)
@@ -68,7 +67,6 @@ const Login = ({ history }) => {
                 <div className='text-center'>
                       &nbsp;
                       <button type="submit" >Login</button>&nbsp;
-                           
                 </div>
             </form>
         </div>)

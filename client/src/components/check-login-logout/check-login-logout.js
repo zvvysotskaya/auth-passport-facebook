@@ -6,15 +6,13 @@ const CheckLoginLogout = () => {
     const [val, setVal] = useState('')
     useEffect(() => {
         let token = localStorage.getItem('token-jwt')
-        console.log('TOKEN: ' + JSON.stringify(token))
-        setVal(token)
         let verToken;
         try {
              verToken = jwt.verify(token, 'secret')
         } catch (er) { console.log(er) }
         
         if (verToken != undefined) {
-            console.log('TOKEN VALID*****')
+            setVal(token)
         }
     }, [])
    
