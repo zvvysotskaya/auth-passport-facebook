@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom'
-
+const jwt = require('jsonwebtoken')
 const Login = ({ history }) => {
 
     const [val, setVal] = useState({
         email: '',
         password: ''
     });
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         let data = {
@@ -20,10 +21,23 @@ const Login = ({ history }) => {
             },
             body: JSON.stringify(data)
         })
-            .then(res => res.text())            
-            .then((res) => { if (res) { history.push('/') } })
+            .then(res => res.text())
+            .then((res) => {
+                try {
+                    
+                    let tokenVerified = jwt.verify(res, 'secret');
+                    if (tokenVerified != undefined) {
+                        localStorage.setItem('token-jwt', res)
+                        console.log('From login page: ' + res)
+                        history.push('/')
+                    } else {
+                        localStorage.removeItem('token-jwt')
+                    }
+                } catch (er) { console.log(er) }
+            })           
             .catch(er => console.log(er))
     }
+    
       return (
         <div>
             <h1>I am A Login Page</h1>

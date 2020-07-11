@@ -30,17 +30,20 @@ module.exports = function (app) {
                                 res.setHeader('Content-Type', 'application/json');
                                 res.json({ success: true, status: 'Registration Successful!' });
                             });
-                            res.send(console.log("Success! username: " + req.body.username));
+                            res.send("Success!");
                         });
                     } else {
                         //console.log('password does not match!');
+                        res.statusCode = 200;
                         return res.send('Password / email does not match')                       
                     }
-                } else {                    
+                } else { 
+                    res.statusCode = 200;
                     return res.send('Such email already exists')
                 }
             });
         } else {
+            res.statusCode = 200;
             return res.send('Sorry, wrong connection!')
         }       
     })
@@ -54,21 +57,18 @@ module.exports = function (app) {
                         return res.status(401);
                     })
                 }
-                console.log('/email/: ' + JSON.stringify(user))
+                //console.log('/email/: ' + JSON.stringify(user))
                 if (user) {
                     let token = jwt.sign({
                         data: 'foobar'
                     }, 'secret', { expiresIn: '1h' });
                     console.log("TOKEN: " + token)
+                    res.statusCode = 200;
                     return res.send(token);
                 }
                 
             })
         })(req, res, next)
     });
-    app.get('/logout', function (req, res, next) {
-        myPassport.localPassport.authenticate('local', function (err, user, info) {
-            if (err) { return next(err); }
-        })(req, res, next)
-    })  
+    
 }

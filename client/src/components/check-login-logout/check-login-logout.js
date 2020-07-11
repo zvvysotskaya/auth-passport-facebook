@@ -5,33 +5,19 @@ const jwt = require('jsonwebtoken')
 const CheckLoginLogout = () => {
     const [val, setVal] = useState('')
     useEffect(() => {
-        fetch('/login')
-            .then(res => res.text())
-            .then((res) => {
-                var decoded
-                try {
-                    decoded = jwt.verify(res, 'secret');                    
-                    if (decoded != undefined) {
-                        console.log("DECODED JWT: " + decoded)
-                        localStorage.setItem(res, 'token-jwt')
-                    } else { localStorage.removeItem('token-jwt') }
-                } catch (err) { console.log(err) }
-                console.log("Decoded val: " + JSON.stringify(decoded))
-            })
-           // .then())
-            .catch(er => console.log(er))
-    }, [])
-    useEffect(() => {
-        
+        let token = localStorage.getItem('token-jwt')
+        console.log('TOKEN: ' + JSON.stringify(token))
+        setVal(token)
+        let verToken;
         try {
-            let storageToken = localStorage.getItem('token-jwt')
-            let verifiedToken = jwt.verify(storageToken, 'secret')
-            if (verifiedToken != undefined) {
-                setVal(storageToken)
-            }
-        } catch (er) { console.log('Error: ' + er) }
+             verToken = jwt.verify(token, 'secret')
+        } catch (er) { console.log(er) }
         
+        if (verToken != undefined) {
+            console.log('TOKEN VALID*****')
+        }
     }, [])
+   
     const loginOrLogout = () => {
         if (!val) {
            return (<Link to='/login'>Login</Link>)
