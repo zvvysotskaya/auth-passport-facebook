@@ -2,22 +2,24 @@ const userConnection = require('../configs/mysql-config-strings');
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const myPassport = require('../configs/passport-configs')
+require('dotenv').config()
 var jwt = require('jsonwebtoken');
 
 module.exports = function (app) {
 
-    app.post('/signup', function (req, res, next) {
+    app.post('/signup', function (req, res) {
         if (userConnection) {
-            console.log('connected to db table - user');
+            console.log('connected to a db table - user');
             let email = req.body.email;
             userConnection.query('SELECT * FROM user where email = ' + userConnection.escape(email), function (error, results, fields) {
-                if (error) throw new Error('Something went wrong');
+                if (error) throw new Error(error);
                 if (results.length < 1) {
                     let salt = bcrypt.genSaltSync(10)
                     let password = bcrypt.hashSync(req.body.password, salt)
                     let post = {
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
+                        admin: false,
                         email: req.body.email,
                         password: password
                     }
@@ -28,12 +30,10 @@ module.exports = function (app) {
                             passport.authenticate('local')(req, res, () => {
                                 res.statusCode = 200;
                                 res.setHeader('Content-Type', 'application/json');
-                                res.json({ success: true, status: 'Registration Successful!' });
-                            });
-                            res.send("Success!");
+                                res.send('Registration Successful!' );
+                            });                        
                         });
-                    } else {
-                        //console.log('password does not match!');
+                    } else {                        
                         res.statusCode = 200;
                         return res.send('Password / email does not match')                       
                     }
@@ -56,15 +56,23 @@ module.exports = function (app) {
                     return next(() => {
                         return res.status(401);
                     })
-                }
-                //console.log('/email/: ' + JSON.stringify(user))
+                }                
                 if (user) {
-                    let token = jwt.sign({
-                        data: 'foobar'
-                    }, 'secret', { expiresIn: '1h' });
-                    console.log("TOKEN: " + token)
-                    res.statusCode = 200;
-                    return res.send(token);
+                    if (user[0].admin === 1) {
+                        let token = jwt.sign({
+                            data: 'foobar'
+                        }, process.env.REACT_APP_TOKEN_ADMIN, { expiresIn: '1000000h' });                        
+                        res.statusCode = 200;
+                        return res.send(token);
+                    }
+                    if (user[0].admin === 0) {
+                        let token = jwt.sign({
+                            data: 'foobar'
+                        }, process.env.REACT_APP_TOKEN_USER, { expiresIn: '1000000h' });                        
+                        res.statusCode = 200;
+                        return res.send(token);
+                    }
+                    
                 }
                 
             })

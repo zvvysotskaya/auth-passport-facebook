@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom'
+require('dotenv').config()
 const jwt = require('jsonwebtoken')
+
+
 const Login = ({ history }) => {
 
     const [val, setVal] = useState({
         email: '',
         password: ''
     });
-    
+
     const handleSubmit = (e) => {
         e.preventDefault()
         let data = {
@@ -24,25 +27,39 @@ const Login = ({ history }) => {
             .then(res => res.text())
             .then((res) => {
                 try {
-                    let tokenVerified = jwt.verify(res, 'secret');
-                    if (tokenVerified != undefined) {
-                        localStorage.setItem('token-jwt', res)
-                        console.log('From login page: ' + res)
-                        history.push('/')
+                    let tokenVerifiedAdmin = jwt.verify(res, process.env.REACT_APP_TOKEN_ADMIN);
+                    if (tokenVerifiedAdmin != undefined) {
+                        localStorage.setItem('token-jwt-admin', res)
+                        localStorage.removeItem('token-jwt-user')
+                        history.push('/admin')
                     } else {
-                        localStorage.removeItem('token-jwt')
+                        localStorage.removeItem('token-jwt-admin')
                     }
                 } catch (er) { console.log(er) }
-            })           
-            .catch(er => console.log(er))
-    }
+            
+
+        try {
+
+            let tokenVerifiedUser = jwt.verify(res, process.env.REACT_APP_TOKEN_USER);
+            if (tokenVerifiedUser != undefined) {
+                localStorage.setItem('token-jwt-user', res)
+                localStorage.removeItem('token-jwt-admin')
+                history.push('/')
+            } else {
+                localStorage.removeItem('token-jwt-user')
+            }
+
+        } catch (er) { console.log(er) }
+    })
+}
     
       return (
-        <div>
+          <div>
+              <Link to='/signup'>Signup</Link>
             <h1>I am A Login Page</h1>
             <Link to='/'>Home</Link><br /><br/>
-            <Link to='/test'>test</Link><br /> <br />
-            <Link to='/signup'>Signup</Link>
+            <Link to='/test'>The test page</Link><br /> <br />
+              <Link to='/admin'>The admin Page</Link>
             <form onSubmit={handleSubmit} method='POST'>
                 <div className='form-group'>
                     <label>Email:</label>

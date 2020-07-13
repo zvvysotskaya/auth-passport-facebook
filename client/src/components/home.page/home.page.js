@@ -4,14 +4,17 @@ import LoginLogout from '../check-login-logout/check-login-logout';
 
 const Home = () => {
 
-   // var bearer = 'Bearer ' + bearer_token;
-    
+    // var bearer = 'Bearer ' + bearer_token;
+    sessionStorage.setItem('aaa', 'check')
+    let aa = sessionStorage.getItem('aaa')
+    console.log('SESSION_STORAGE:' +aa)
     return (
         <div>
-            <h1>I am A Home Page</h1>
+            <LoginLogout />
             <Link to='/signup'>Signup</Link><br /><br />
-            <LoginLogout/><br /><br />
-            <Link to='/test'>test</Link>
+            <h1>I am A Home Page</h1>            
+            <Link to='/admin'>The admin page</Link><br /><br />
+            <Link to='/test'>The test page</Link>
         </div>)
 }
 export default Home;

@@ -71,7 +71,7 @@ const Signup = () => {
                 /><br/>
                 <label>Email:</label>
                 <input
-                    name='email'
+                    name='text'
                     placeholder='email'
                     value={val.email}
                     onChange={(e) => { setVal({ ...val, email: e.target.value }) }}
