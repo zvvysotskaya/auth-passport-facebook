@@ -32,10 +32,12 @@ const Signup = () => {
     }
     return (
         <div>
-            <h1>I am A Signup Page</h1>
+            <Link to='/login'>Login</Link><br ></br >
             <Link to='/'>Home</Link><br /><br />
             <Link to='/test'>test</Link>
-            <Link to='/login'>Login</Link>
+            
+            <h1>I am A Signup Page</h1>
+            
             <form onSubmit={handleSubmit} method='POST'>
                 <label>First name</label>
                 <input

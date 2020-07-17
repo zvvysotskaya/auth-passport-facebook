@@ -6,13 +6,10 @@ const Home = () => {
     
     return (
         <div>
-            <LoginLogout />
+            <LoginLogout /><br />
+            <Link to='/'>Home</Link><br /><br />
+            <Link to='/admin'>The admin page</Link><br /><br />            
             <h1>Congrats, You are authorized for this page!!!</h1>
-
-            <Link to='/'>Home</Link><br /><br/>
-            <Link to='/signup'>Signup</Link><br /><br />
-            
-            <Link to='/login'>Login</Link>
         </div>)
 }
 export default Home;

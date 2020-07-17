@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import LoginWithFacebook from '../social-component/facebook-login';
+
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-
 
 const Login = ({ history }) => {
 
@@ -10,7 +11,14 @@ const Login = ({ history }) => {
         email: '',
         password: ''
     });
-
+    const [fbVal, setFbVal] = useState('')
+    
+    useEffect(() => {
+        let fb = localStorage.getItem('user-facebook')
+        if (fb !== '' && fb != undefined && fb != null) {
+            setFbVal(fb)
+        }
+    }, [])
     const handleSubmit = (e) => {
         e.preventDefault()
         let data = {
@@ -21,6 +29,7 @@ const Login = ({ history }) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin':'*'
             },
             body: JSON.stringify(data)
         })
@@ -36,30 +45,33 @@ const Login = ({ history }) => {
                         localStorage.removeItem('token-jwt-admin')
                     }
                 } catch (er) { console.log(er) }
-            
 
-        try {
-
-            let tokenVerifiedUser = jwt.verify(res, process.env.REACT_APP_TOKEN_USER);
-            if (tokenVerifiedUser != undefined) {
-                localStorage.setItem('token-jwt-user', res)
-                localStorage.removeItem('token-jwt-admin')
-                history.push('/')
-            } else {
-                localStorage.removeItem('token-jwt-user')
-            }
-
-        } catch (er) { console.log(er) }
-    })
-}
-    
-      return (
-          <div>
-              <Link to='/signup'>Signup</Link>
+                try {
+                    let tokenVerifiedUser = jwt.verify(res, process.env.REACT_APP_TOKEN_USER);
+                    if (tokenVerifiedUser != undefined) {
+                        localStorage.setItem('token-jwt-user', res)
+                        localStorage.removeItem('token-jwt-admin')
+                        history.push('/')
+                    } else {
+                        localStorage.removeItem('token-jwt-user')
+                    }
+                } catch (er) { console.log(er) }
+            })
+    }
+    function loginWithFacebook() {
+        if (fbVal != '') {
+            return ''
+        } else {
+            return (<LoginWithFacebook />)
+        }
+    }
+    return (
+        <div>
+            <Link to='/'>Home</Link><br />&nbsp;<Link to='/test'>The test page</Link><br /> &nbsp;<Link to='/admin'>The admin Page</Link>              
             <h1>I am A Login Page</h1>
-            <Link to='/'>Home</Link><br /><br/>
-            <Link to='/test'>The test page</Link><br /> <br />
-              <Link to='/admin'>The admin Page</Link>
+            <p>Do not have an account?</p>
+            <Link to='/signup'>Signup</Link><br /><br />
+
             <form onSubmit={handleSubmit} method='POST'>
                 <div className='form-group'>
                     <label>Email:</label>
@@ -80,12 +92,13 @@ const Login = ({ history }) => {
                         value={val.password}
                         onChange={e => setVal({ ...val, password: e.target.value })}
                     />
-                </div>
+                </div><br/>
                 <div className='text-center'>
                       &nbsp;
                       <button type="submit" >Login</button>&nbsp;
                 </div>
-            </form>
+            </form><br />
+            {loginWithFacebook()}
         </div>)
 }
 export default withRouter(Login);

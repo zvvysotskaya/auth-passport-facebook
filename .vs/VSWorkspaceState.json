@@ -2,13 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\client",
+    "\\client\\public",
     "\\client\\src",
     "\\client\\src\\components",
     "\\client\\src\\components\\login.page",
-    "\\client\\src\\components\\private-route",
+    "\\client\\src\\components\\social-component",
     "\\configs",
     "\\routes"
   ],
-  "SelectedNode": "\\client\\src\\components\\private-route\\private-route.js",
+  "SelectedNode": "\\client\\src\\components\\social-component",
   "PreviewInSolutionExplorer": false
 }
